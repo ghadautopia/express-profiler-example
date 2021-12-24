@@ -1,0 +1,52 @@
+{
+  "name": "@ghadautopia/express-profiler-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo app for Ghada Express Profiler",
+  "author": "Mahmoud Elbayoumy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghadautopia/express-profiler-example.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "views",
+    "public"
+  ],
+  "scripts": {
+    "start": "DEBUG=ghada-profiler:* node ./bin/www",
+    "dev": "npm run dep:remove && npm run dep:dev && npm run dev:webserver",
+    "dev:webserver": "DEBUG=* nodemon -e js,ts,ejs,scss,css --watch './**' --ignore './public/**' --watch '../express-profiler/dist/**' --watch '../express-profiler/public/**' --watch '../express-profiler/views/**' --watch '../externals/**/dist/**' --watch '../externals/**/views/**' --exec 'npm i ../express-profiler ../externals/express-profiler-axios ../externals/express-profiler-mongoose && ./bin/www'",
+    "dep:refresh": "npm run dep:remove && npm run dep:install",
+    "dep:install": "npm i @ghadautopia/express-profiler@${VERSION} @ghadautopia/express-profiler-axios@${VERSION} @ghadautopia/express-profiler-mongoose@${VERSION}",
+    "dep:remove": "npm rm @ghadautopia/express-profiler @ghadautopia/express-profiler-axios @ghadautopia/express-profiler-mongoose",
+    "dep:dev": "npm run dep:dev:axios & npm run dep:dev:mongoose",
+    "dep:dev:axios": "cd ../externals/express-profiler-axios && npm run install:local-profiler",
+    "dep:dev:mongoose": "cd ../externals/express-profiler-mongoose && npm run install:local-profiler"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/debug": "^4.1.7",
+    "@types/http-errors": "^1.8.1",
+    "@types/morgan": "^1.9.3",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "@ghadautopia/express-profiler": "^1.0.1",
+    "@ghadautopia/express-profiler-axios": "^1.0.0",
+    "@ghadautopia/express-profiler-mongoose": "^1.0.0",
+    "axios": "^0.24.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "^2.6.9",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "json-server": "^0.17.0",
+    "mongoose": "^6.0.14",
+    "morgan": "~1.9.1"
+  }
+}

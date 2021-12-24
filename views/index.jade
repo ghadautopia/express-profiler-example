@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  main(class="container py-5")
+    header(class="d-flex justify-content-between align-items-end")
+      h2 Ghada Express Profiler Example
+      a(class="btn btn-dark", target="_blank", title="profiler main page", href="/_ghada_profiler")="profiler main page"
+    form(id="req-res-form", method=reqMethod, class="position-relative border rounded px-3 pt-4 pb-1 mt-4 mb-3")
+      h5(class="position-absolute bg-white px-2 text-dark" style="font-weight: normal; top: -13px") Simulate Call
+      fieldset
+        legend(class="fs-5 text-secondary") Scopes
+        each item, index in (testScopes || [])
+          div(class="row mb-2")
+            label(class="col-sm-2 col-form-label")=item.name
+            div(class="col-sm-10")
+              - const methods = item.options.filter(o => !o.isError)
+              - const methodsLen = methods.length
+              each option, index in methods
+                if !option.isError
+                  div(class=`form-check form-check-inline js-method${methodsLen === index + 1 ? ' border-end pe-3' : ''}`)
+                    input(name=`scope_${item.name}`, class="form-check-input", type="checkbox", value=option.value, checked=option.checked)
+                    label(class="form-check-label", title=option.description, style=(option.description && 'cursor: help'))=option.value
+              each option in item.options
+                if option.isError
+                  div(class="form-check form-check-inline js-error")
+                    input(name=`scope_${item.name}`, class="form-check-input", type="radio", value=option.value, checked=option.checked)
+                    label(class="form-check-label", title=option.description, style=(option.description && 'cursor: help'))=option.value
+      hr
+      div(class="mb-3 row")
+        label(class="col-sm-6 col-form-label") Request method
+        div(class="col-sm-6 col-form-label")
+          each item, index in ["POST", "GET"]
+            div(class="form-check form-check-inline")
+              input(class="form-check-input", type="radio", name="req_method", value=item, checked=(reqMethod == item), onclick="function onChange(e) { console.log(this) }")
+              label(class="form-check-label")=item      
+    
+      div(class="mb-3 row")
+        div(class="col")
+          div(col="row")
+            label(class="col-sm-6 col-form-label") Response type
+            each item, index in ["html", "json"]
+              div(class="form-check form-check-inline")
+                input(class="form-check-input", type="radio", name="res_type", value=item, checked=(resType == item))
+                label(class="form-check-label")=item
+        div(class="col")
+          div(class="row")
+            label(for="statusCode", class="col-sm-6 col-form-label") Response status code
+            div(class="col-sm-6")
+              input(type="text", name="res_status", class="form-control", id="statusCode", value=resStatus)
+
+      button(role="submit", class="btn btn-dark mb-3 ml-auto") Submit
+
+    section(class="position-relative border rounded p-3 pt-4 mt-4 mb-3 d-flex", style="gap: 5px")
+      h5(class="position-absolute bg-white px-2 text-dark" style="font-weight: normal; top: -13px") Errors
+      each item, index in (testErrors || [])
+        a(class=`btn-${item.color} btn`, target="_blank", title=(item.description || item.name), href=item.href, style="cursor: help")=item.name 
